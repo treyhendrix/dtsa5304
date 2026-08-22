@@ -1,0 +1,11 @@
+[project]
+name = "dtsa5304"
+version = "0.1.0"
+description = "Final project for DTSA 5304 - Fundamentals of Data Visualization"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "altair>=6.2.2",
+    "pandas>=3.0.5",
+    "scipeds>=0.0.8",
+]
