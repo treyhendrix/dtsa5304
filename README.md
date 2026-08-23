@@ -9,7 +9,6 @@ This repository contains my final assignment for DTSA 5304 as well as the code t
 * `rise_of_cs.html` the rendered version of `rise_of_cs.qmd`, which will be submitted. It can be downloaded and viewed in a web browser (GitHub will only display the raw HTML source code).
 * `src` contains Python scripts for extracting, transforming, and loading the 
 Integrated Postsecondary Education Data System (IPEDS) data. These scripts are called by `rise_of_cs.qmd`.
-* `instructions` contains project instructions are requirements (for my convenience and reference).
 
 
 ## Reproducibility and Environment Setup
