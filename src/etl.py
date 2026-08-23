@@ -10,17 +10,52 @@ import sys
 from pathlib import Path
 
 import scipeds
+from scipeds.constants import COMPLETIONS_TABLE
+from scipeds.data.completions import CompletionsQueryEngine
 
-# %% Identify Directory
+# %% Identify Project Directory
 if "ipykernel" in sys.modules:
-    print("Interactive session")
     PROJECT_DIR = Path.cwd().resolve()
 elif "__file__" in globals():
     PROJECT_DIR = Path(__file__).parent.parent
-    print("Terminal session")
 else:
     raise FileNotFoundError("Could not find project directory.")
 
+# %% Download Duck DB
+DATA_DIR = PROJECT_DIR / "data"
+DATA_DIR.mkdir(exist_ok=True)
 
-# %% Download DB
-scipeds.download_db  # the=
+
+def _update_list_of_duckdb_files(data_dir: Path = DATA_DIR) -> list[Path]:
+    fn_duckdb_files = []
+    for file in data_dir.iterdir():
+        if file.name.endswith(".duckdb"):
+            fn_duckdb_files.append(file)
+    return fn_duckdb_files
+
+
+duckdb_files = _update_list_of_duckdb_files()
+
+if len(duckdb_files) == 0:
+    print("No DuckDB files found. Downloading IPEDS data...")
+    scipeds.download_db(DATA_DIR, overwrite=True, verbose=False)
+    print("IPEDS data sucessfully downloaded as a .duckdb file")
+    duck_db_files = _update_list_of_duckdb_files()
+elif len(duckdb_files) == 1:
+    print("Relying on previous IPEDS download.")
+else:
+    raise FileExistsError(
+        f"Multiple .duckdb files found in data directory: {"; ".join(str(x.name) for x in duckdb_files)}. Please clear the directory and try again."
+    )
+DUCK_DB_FILEPATH = duck_db_files[0]
+# %% Query the DB for completion data
+engine = CompletionsQueryEngine(DUCK_DB_FILEPATH)
+
+# TODO 2026-08-23T13:36:13-0400 Working on querying... need to read scipeds API guide
+deg_df = engine.get_df_from_query(
+    f"""
+    SELECT * 
+    FROM {COMPLETIONS_TABLE}
+    LIMIT 10;
+    """
+)
