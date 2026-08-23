@@ -1,0 +1,33 @@
+---
+title: The Rise of the Computer Science
+author: Trey Hendrix
+date: late-modified
+format: 
+    html:
+        embed-resources: true
+        toc: true
+---
+
+## Introduction
+
+My data visualization project leverages the Integrated Postsecondary Education Data System (IPEDS) dataset to answer the question: when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically and across institutions? 
+
+This question is motivated and informed by my previous data projects I have worked on as part of my job in high education administration. Of course, the "learn-to-code" phenomenon is a ubiquitious topic in higher education, yet I was still surprised to see the dramatic national trend in CS degrees in the dataset. 
+
+Furthermore, as part of my previous IPEDS data project, I struggled to efficiently visualize the rich degrees granted IPEDS dataset. I wanted to maximize the freedom of users to discover trends in the data across institutions. However, many visualizations involved line plots with many institutions shown as different colors, producing a "rainbow spaghetti" effect that obscured trends and likely discouraged exploration. Thus, for this project, I wanted to begin with a more focused question and an improved understanding of effective visualization design from Dr. Albers Szafir's lectures. 
+
+## IPEDS Data Information
+
+
+```{python}
+# | label: External Modules
+
+from datetime import datetime
+from zoneinfo import ZoneInfo
+```
+
+## Metadata
+
+This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
+
+
