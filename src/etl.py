@@ -55,7 +55,71 @@ engine = CompletionsQueryEngine(DUCK_DB_FILEPATH)
 deg_df = engine.get_df_from_query(
     f"""
     SELECT * 
-    FROM {COMPLETIONS_TABLE}
-    LIMIT 10;
+    FROM {COMPLETIONS_TABLE};
     """
+)
+
+dir_df = engine.get_df_from_query(
+    """
+    SELECT * 
+    FROM ipeds_directory_info;
+    """
+)
+
+cs_df = engine.get_df_from_query(
+    f"""
+    SELECT
+        c.year,
+        d.unitid, d.institution_name, d.state_abbreviation,
+        SUM(c.n_awards) AS cs_bachelors_degrees
+    FROM {COMPLETIONS_TABLE} AS c
+    LEFT JOIN ipeds_directory_info AS d ON c.unitid = d.unitid
+    WHERE 
+        c.awlevel = 'Bachelor''s degree'
+        AND c.ncses_detailed_field_group = 'Computer Science'
+        AND d.control_of_institution IN ('Private not-for-profit', 'Public')
+    GROUP BY c.year, d.unitid, d.institution_name, d.state_abbreviation
+    ORDER BY c.year;
+    """
+)
+
+bach_df = engine.get_df_from_query(
+    f"""
+    SELECT
+        c.year,
+        d.unitid,
+        SUM(c.n_awards) AS bachelors_degrees
+    FROM {COMPLETIONS_TABLE} AS c
+    LEFT JOIN ipeds_directory_info AS d ON c.unitid = d.unitid
+    WHERE 
+        c.awlevel = 'Bachelor''s degree'
+        AND d.control_of_institution IN ('Private not-for-profit', 'Public')
+    GROUP BY c.year, d.unitid
+    ORDER BY c.year;
+    """
+)
+
+prop_cs_df = cs_df.merge(
+    bach_df[["year", "unitid", "bachelors_degrees"]],
+    how="inner",
+    on=["year", "unitid"],
+    validate="1:1",
+)
+# NAs are not expected for either column, but we will fill them with zeros just in case
+prop_cs_df["cs_bachelors_degrees"] = prop_cs_df["cs_bachelors_degrees"].fillna(0)
+prop_cs_df["bachelors_degrees"] = prop_cs_df["bachelors_degrees"].fillna(0)
+
+# TODO 2026-08-23T20:31:08-0400 Need to make this calculation safe to divide-by-zero errors
+prop_cs_df["prop_cs"] = (
+    prop_cs_df["cs_bachelors_degrees"] / prop_cs_df["bachelors_degrees"]
+)
+
+
+# Summarize by state
+
+
+# %% Check what CIP codes map to ncses_detailed_field_group
+# TODO 2026-08-23T20:33:57-0400 Working on this
+cip_ncses_df = (
+    deg_df[["ncses_detailed_field_group", "cipcode"]].value_counts().reset_index()
 )
