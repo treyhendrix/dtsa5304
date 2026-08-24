@@ -51,21 +51,6 @@ DUCK_DB_FILEPATH = duck_db_files[0]
 # %% Query the DB for completion data
 engine = CompletionsQueryEngine(DUCK_DB_FILEPATH)
 
-# TODO 2026-08-23T13:36:13-0400 Working on querying... need to read scipeds API guide
-deg_df = engine.get_df_from_query(
-    f"""
-    SELECT * 
-    FROM {COMPLETIONS_TABLE};
-    """
-)
-
-dir_df = engine.get_df_from_query(
-    """
-    SELECT * 
-    FROM ipeds_directory_info;
-    """
-)
-
 cs_df = engine.get_df_from_query(
     f"""
     SELECT
@@ -120,6 +105,18 @@ prop_cs_df["prop_cs"] = (
 
 # %% Check what CIP codes map to ncses_detailed_field_group
 # TODO 2026-08-23T20:33:57-0400 Working on this
-cip_ncses_df = (
-    deg_df[["ncses_detailed_field_group", "cipcode"]].value_counts().reset_index()
+
+cip_df = engine.get_df_from_query(
+    f"""
+    SELECT DISTINCT 
+        cipcode::TEXT AS cipcode, 
+        ncses_detailed_field_group::TEXT AS ncses_detailed_field_group
+    FROM {COMPLETIONS_TABLE};
+    """
 )
+cs_cip_df = cip_df.loc[cip_df["ncses_detailed_field_group"] == "Computer Science"]
+# CIP families
+# Mostly 11 = Computer and information Science and Support Services
+# But a few 07 = Does not exist in current taxonomy... weird
+# A few 30 = Multi/Interdisciplinary (e.g., data science)
+# A few 52 = Business (e.g., "Business Systems Networking and Telecommunications")
