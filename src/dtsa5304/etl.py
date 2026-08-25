@@ -2,7 +2,7 @@
 ETL Script for IPEDS CS Degrees
 Author: Trey Hendrix
 Date Started: 2026-08-23
-Date Updated: 2026-08-24
+Date Updated: 2026-08-25
 """
 
 # %% Modules
@@ -11,7 +11,6 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import scipeds
 from scipeds.constants import COMPLETIONS_TABLE
@@ -112,16 +111,26 @@ def get_ipeds_data() -> pd.DataFrame:
         on=["year", "unitid"],
         validate="1:1",
     )
-    # NAs are not expected for either column, but we will fill them with zeros just in case
-    prop_cs_df["cs_bachelors_degrees"] = prop_cs_df["cs_bachelors_degrees"].fillna(0)
-    prop_cs_df["bachelors_degrees"] = prop_cs_df["bachelors_degrees"].fillna(0)
+    # Check for NA values in degree counts (not expected) to prevent divide-by-zero issues
+    n_cs_na = prop_cs_df["cs_bachelors_degrees"].isna().sum()
+    n_bach_na = prop_cs_df["bachelors_degrees"].isna().sum()
+    if n_cs_na == 0 and n_bach_na == 0:
+        logger.info("No NA degree counts detected.")
+    else:
+        logger.info(
+            f"NA degree counts detected: {n_cs_na} CS count NAs and {n_bach_na} bachelor's degree NAs"
+        )
+        logger.info(
+            "Dropping any NA bachelor's degree count records and filling any missing CS degree counts with zeros."
+        )
+        prop_cs_df = prop_cs_df.loc[~prop_cs_df["bachelors_degrees"].isna()]
+        prop_cs_df["cs_bachelors_degrees"] = prop_cs_df["cs_bachelors_degrees"].fillna(
+            0
+        )
 
+    # This calculation should be safe from divide-by-zero errors
     prop_cs_df["prop_cs"] = (
-        (prop_cs_df["cs_bachelors_degrees"] / prop_cs_df["bachelors_degrees"])
-        .replace(
-            [np.inf, -np.inf], np.nan
-        )  # handle divide-by-zero errors (none are expected)
-        .fillna(0)
+        prop_cs_df["cs_bachelors_degrees"] / prop_cs_df["bachelors_degrees"]
     )
     logger.info(
         "Returning proportion of CS bachelor's degrees by year for all public and non-profit institutions."
