@@ -26,7 +26,7 @@ def get_ipeds_data() -> pd.DataFrame:
     if "ipykernel" in sys.modules:
         PROJECT_DIR = Path.cwd().resolve()
     elif "__file__" in globals():
-        PROJECT_DIR = Path(__file__).parent.parent
+        PROJECT_DIR = Path(__file__).parent.parent.parent
     else:
         raise FileNotFoundError("Could not find project directory.")
 

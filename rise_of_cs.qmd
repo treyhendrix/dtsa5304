@@ -20,14 +20,15 @@ Furthermore, as part of my previous IPEDS data project, I struggled to visualize
 
 ```{python}
 # | label: External Modules
-
+import sys
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 ```
 
 ```{python}
 # | label: Local Modules
-from src.etl import get_ipeds_data
+from dtsa5304.etl import get_ipeds_data
 ```
 
 ```{python}
@@ -42,13 +43,13 @@ prop_cs_df
 
 ```{python}
 # | label: Summarize data by state 
-state_all_time_df["prop"] = state_all_time_df["cs_bach"] / state_all_time_df["bach"]
+# state_all_time_df["prop"] = state_all_time_df["cs_bach"] / state_all_time_df["bach"]
 
-state_all_time_df = (
-    prop_cs_df.groupby("state_abbreviation")
-    .agg(cs_bach=("cs_bachelors_degrees", "sum"), bach=("bachelors_degrees", "sum"))
-    .reset_index()
-)
+# state_all_time_df = (
+#     prop_cs_df.groupby("state_abbreviation")
+#     .agg(cs_bach=("cs_bachelors_degrees", "sum"), bach=("bachelors_degrees", "sum"))
+#     .reset_index()
+# )
 ```
 
 ## Metadata
