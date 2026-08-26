@@ -21,7 +21,7 @@ Furthermore, as part of my previous IPEDS data project, I struggled to visualize
 IPEDS is...
 
 ```{python}
-# | label: External Modules
+# | label: external-modules
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -29,7 +29,7 @@ from itables import show
 ```
 
 ```{python}
-# | label: Local Modules
+# | label: local-modules
 from dtsa5304.etl import get_ipeds_data
 from dtsa5304.util import find_project_dir
 ```
@@ -37,14 +37,14 @@ from dtsa5304.util import find_project_dir
 To access these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
 
 ```{python}
-# | label: IPEDS ETL
+# | label: ipeds-etl
 prop_cs_df = get_ipeds_data()
 ```
 
 Our basic dataset is fairly simple: for each non-profit or public institution in the IPEDS database, we have yearly counts of Bachelor's degrees and Computer Science Bachelor's degrees. The dataset is fairly large, with `{python} f"{prop_cs_df.shape[0]:,}"` rows, so I will show only the largest (by Bachelor's degrees award) institution in each state below for the latest survey year:
 
 ```{python}
-# | label: State sample
+# | label: state-sample
 sample_prop_cs_df = (
     prop_cs_df.sort_values(
         ["state_abbreviation", "year", "bachelors_degrees"], ascending=[True, False, False]
@@ -58,13 +58,13 @@ show(sample_prop_cs_df, showIndex=False)
 Descriptive statistics for the numeric columns: 
 
 ```{python}
-# | label: Num col stats
+# | label: num-col-stats
 num_col_stats_df = prop_cs_df.drop(columns="unitid").describe()
 show(num_col_stats_df)
 ```
 
 ```{python}
-# | label: Summarize data by state 
+# | label: summarize-data-by-state
 # state_all_time_df["prop"] = state_all_time_df["cs_bach"] / state_all_time_df["bach"]
 
 # state_all_time_df = (
