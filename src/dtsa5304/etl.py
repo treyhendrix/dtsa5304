@@ -16,18 +16,16 @@ import scipeds
 from scipeds.constants import COMPLETIONS_TABLE
 from scipeds.data.completions import CompletionsQueryEngine
 
+# %% Local Modules
+from dtsa5304.util import find_project_dir
+
 
 # %% IPEDS ETL Function
 def get_ipeds_data() -> pd.DataFrame:
     """Download IPEDS duckDB file (if necessary) and wrangle data into rows representing counts of CS Bachelor's degrees and all Bachelor's degrees for all public and non-profit instititions for all years."""
 
     # Identify Project Directory
-    if "ipykernel" in sys.modules:
-        PROJECT_DIR = Path.cwd().resolve()
-    elif "__file__" in globals():
-        PROJECT_DIR = Path(__file__).parent.parent.parent
-    else:
-        raise FileNotFoundError("Could not find project directory.")
+    PROJECT_DIR = find_project_dir()
 
     # Logging (for printing to console)
     class ISO8601Formatter(logging.Formatter):
@@ -71,39 +69,37 @@ def get_ipeds_data() -> pd.DataFrame:
     logger.info(f"Duck DB file '{DUCK_DB_FILEPATH!s}' ready for use.")
     # Query the DB for completion data
     engine = CompletionsQueryEngine(DUCK_DB_FILEPATH)
+
+    def _query_bachelors_degrees(
+        engine: CompletionsQueryEngine,
+        extra_filter: str = "",
+        degree_col_alias: str = "bachelors_degrees",
+    ) -> pd.DataFrame:
+        return engine.get_df_from_query(
+            f"""
+            SELECT
+                c.year,
+                d.unitid, d.institution_name, d.state_abbreviation,
+                SUM(c.n_awards) AS {degree_col_alias}
+            FROM {COMPLETIONS_TABLE} AS c
+            LEFT JOIN ipeds_directory_info AS d ON c.unitid = d.unitid
+            WHERE 
+                c.awlevel = 'Bachelor''s degree'
+                AND d.control_of_institution IN ('Private not-for-profit', 'Public')
+                {extra_filter}
+            GROUP BY c.year, d.unitid, d.institution_name, d.state_abbreviation
+            ORDER BY c.year;
+            """
+        )
+
     logger.info("Querying CS bachelor's degrees from DuckDB.")
-    cs_df = engine.get_df_from_query(
-        f"""
-        SELECT
-            c.year,
-            d.unitid, d.institution_name, d.state_abbreviation,
-            SUM(c.n_awards) AS cs_bachelors_degrees
-        FROM {COMPLETIONS_TABLE} AS c
-        LEFT JOIN ipeds_directory_info AS d ON c.unitid = d.unitid
-        WHERE 
-            c.awlevel = 'Bachelor''s degree'
-            AND c.ncses_detailed_field_group = 'Computer Science'
-            AND d.control_of_institution IN ('Private not-for-profit', 'Public')
-        GROUP BY c.year, d.unitid, d.institution_name, d.state_abbreviation
-        ORDER BY c.year;
-        """
+    cs_df = _query_bachelors_degrees(
+        engine,
+        extra_filter="AND c.ncses_detailed_field_group = 'Computer Science'",
+        degree_col_alias="cs_bachelors_degrees",
     )
     logger.info("Querying all bachelor's degrees from DuckDB.")
-    bach_df = engine.get_df_from_query(
-        f"""
-        SELECT
-            c.year,
-            d.unitid,
-            SUM(c.n_awards) AS bachelors_degrees
-        FROM {COMPLETIONS_TABLE} AS c
-        LEFT JOIN ipeds_directory_info AS d ON c.unitid = d.unitid
-        WHERE 
-            c.awlevel = 'Bachelor''s degree'
-            AND d.control_of_institution IN ('Private not-for-profit', 'Public')
-        GROUP BY c.year, d.unitid
-        ORDER BY c.year;
-        """
-    )
+    bach_df = _query_bachelors_degrees(engine)
 
     prop_cs_df = cs_df.merge(
         bach_df[["year", "unitid", "bachelors_degrees"]],
