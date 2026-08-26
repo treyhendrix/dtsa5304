@@ -22,7 +22,7 @@ from dtsa5304.util import find_project_dir
 
 # %% IPEDS ETL Function
 def get_ipeds_data() -> pd.DataFrame:
-    """Download IPEDS duckDB file (if necessary) and wrangle data into rows representing counts of CS Bachelor's degrees and all Bachelor's degrees for all public and non-profit instititions for all years."""
+    """Download IPEDS duckDB file (if necessary) and wrangle data into rows representing counts of CS Bachelor's degrees and all Bachelor's degrees for all public and non-profit institutions for all years."""
 
     # Identify Project Directory
     PROJECT_DIR = find_project_dir()
@@ -59,6 +59,7 @@ def get_ipeds_data() -> pd.DataFrame:
         scipeds.download_db(DATA_DIR, overwrite=True, verbose=False)
         logger.info("IPEDS data sucessfully downloaded as a .duckdb file")
         duckdb_files = _update_list_of_duckdb_files()
+        # TODO 2026-08-26T07:00:01-0400 Add a check here for if no files are found after the download (edge case)
     elif len(duckdb_files) == 1:
         logger.info("Previous IPEDS download found. Skipping fresh data download.")
     else:
