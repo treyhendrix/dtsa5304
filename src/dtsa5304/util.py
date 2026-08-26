@@ -20,7 +20,7 @@ def find_project_dir() -> Path:
         candidate_paths = [Path.cwd().resolve()] + [*Path.cwd().resolve().parents]
     elif "__file__" in globals():  # File is being run in the terminal/as an executable
         env_type = "terminal"
-        script_path = Path(__file__)
+        script_path = Path(__file__).parent
         candidate_paths = [script_path.resolve()] + [*script_path.resolve().parents]
     else:
         raise FileNotFoundError(
@@ -29,7 +29,7 @@ def find_project_dir() -> Path:
 
     # Travel up in the directory until we find our repo's toml file or run out of options
     for path in candidate_paths:
-        if "pyproject.toml" not in [file.name for file in path.iterdir()]:
+        if "pyproject.toml" in [file.name for file in path.iterdir()]:
             PROJECT_DIR = path
             break
         if not path.name:
@@ -52,4 +52,3 @@ def find_project_dir() -> Path:
 # %% Default script behavior
 if __name__ == "__main__":
     print(f"Project dir found at {find_project_dir()!s}")
-    # TODO 2026-08-25T07:14:01-0400 Finding parent dir of target... need to fix this
