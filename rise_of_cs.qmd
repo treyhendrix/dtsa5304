@@ -96,7 +96,7 @@ all_time_prop_change_df = (
 ```
 
 ```{python}
-# | label: map setup
+# | label: map-setup
 
 # Add 2-digit FIPS id column to our IPEDS data
 all_time_prop_change_df["fips"] = (
