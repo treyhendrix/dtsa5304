@@ -25,13 +25,16 @@ IPEDS is...
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+import altair as alt
 from itables import show
+from vega_datasets import data
 ```
 
 ```{python}
 # | label: local-modules
 from dtsa5304.etl import get_ipeds_data
 from dtsa5304.util import find_project_dir
+from dtsa5304.ref import fips_map
 ```
 
 To access these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
@@ -63,15 +66,82 @@ num_col_stats_df = prop_cs_df.drop(columns="unitid").describe()
 show(num_col_stats_df)
 ```
 
-```{python}
-# | label: summarize-data-by-state
-# state_all_time_df["prop"] = state_all_time_df["cs_bach"] / state_all_time_df["bach"]
+To visualize geographic trends in these data, we will sumarize the data at the state-year level: 
 
-# state_all_time_df = (
-#     prop_cs_df.groupby("state_abbreviation")
-#     .agg(cs_bach=("cs_bachelors_degrees", "sum"), bach=("bachelors_degrees", "sum"))
-#     .reset_index()
-# )
+```{python}
+# | label: state-year-roll-up
+
+state_year_df = (
+    prop_cs_df.groupby(["year", "state_abbreviation"])
+    .agg({"cs_bachelors_degrees": "sum", "bachelors_degrees": "sum"})
+    .reset_index()
+)
+state_year_df["prop_cs"] = (
+    state_year_df["cs_bachelors_degrees"] / state_year_df["bachelors_degrees"]
+)
+```
+
+Now, we have a much more managable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trendlines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
+
+Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python state_year_df["year"].min()}` to `{python state_year_df["year"].min()}`). 
+
+```{python}
+# | label: prop-change
+sorted_grouped_state_year_df = state_year_df.sort_values(by=["state_abbreviation", "year"]).groupby("state_abbreviation")
+
+all_time_prop_change_df = (
+    sorted_grouped_state_year_df["prop_cs"].last() - 
+    sorted_grouped_state_year_df["prop_cs"].first()
+).reset_index(name="prop_cs_change")
+```
+
+```{python}
+# | label: map setup
+
+# Add 2-digit FIPS id column to our IPEDS data
+all_time_prop_change_df["fips"] = (
+    all_time_prop_change_df["state_abbreviation"].map(fips_map).astype(int)
+)  # The data source below drops leading zeros
+
+states = alt.topo_feature(data.us_10m.url, "states")
+
+# To scale positive and negative values with a diverging palette
+max_abs_change = all_time_prop_change_df["prop_cs_change"].abs().max()
+
+change_map = (
+    alt.Chart(states)
+    .mark_geoshape()
+    .encode(
+        color=alt.Color(
+            "prop_cs_change:Q",
+            scale=alt.Scale(
+                scheme="redblue",
+                domain=[-max_abs_change, max_abs_change],
+                reverse=True,
+            ),
+            title="Change in % CS Bachelor's Degrees",
+            legend=alt.Legend(format="%"),
+        ),
+        tooltip=[
+            alt.Tooltip("state_abbreviation:N", title="State"),
+            alt.Tooltip("prop_cs_change:Q", title="Change", format=".2%"),
+        ],
+    )
+    .transform_lookup(
+        lookup="id",
+        from_=alt.LookupData(
+            data=all_time_prop_change_df,
+            key="fips",
+            fields=["prop_cs_change", "state_abbreviation"],
+        ),
+    )
+    .properties(width=600, height=400)
+    .project(
+        type="albersUsa"  # Note: The territories (e.g, Guam) are dropped here, unfortunately
+    )
+)
+
+change_map.show()
 ```
 
 ## Metadata
