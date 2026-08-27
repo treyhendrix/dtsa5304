@@ -108,6 +108,11 @@ states = alt.topo_feature(data.us_10m.url, "states")
 # To scale positive and negative values with a diverging palette
 max_abs_change = all_time_prop_change_df["prop_cs_change"].abs().max()
 
+click = alt.selection_point(
+    name="click", 
+    fields=["state_abbreviation"], value=[{"state_abbreviation": "NJ"}], empty=False
+)
+
 change_map = (
     alt.Chart(states)
     .mark_geoshape()
@@ -119,8 +124,17 @@ change_map = (
                 domain=[-max_abs_change, max_abs_change],
                 reverse=True,
             ),
-            title="Change in % CS Bachelor's Degrees",
-            legend=alt.Legend(format="%"),
+            legend=alt.Legend(
+                format="%",
+                orient="top",
+                offset=0,
+                direction="horizontal",
+                gradientLength=450,
+                title="All Time Change in Percent of Bachelor's Degrees Awarded in CS",
+                titleOrient="top",
+                titleAnchor="middle",
+                titleLimit=450,
+            ),
         ),
         tooltip=[
             alt.Tooltip("state_abbreviation:N", title="State"),
@@ -135,13 +149,52 @@ change_map = (
             fields=["prop_cs_change", "state_abbreviation"],
         ),
     )
-    .properties(width=600, height=400)
+    .properties(
+        width=500,
+        height=400,
+    )
     .project(
         type="albersUsa"  # Note: The territories (e.g, Guam) are dropped here, unfortunately
     )
+    .add_params(click)
 )
+```
 
-change_map.show()
+```{python}
+# | label: state-trend-plot
+
+line_chart = (
+    alt.Chart(state_year_df)
+    .mark_line(point=True)
+    .encode(
+        x=alt.X("year:Q", axis=alt.Axis(format="d"), title="Year"),
+        y=alt.Y("prop_cs:Q", axis=alt.Axis(format="%"), title="Proportion"),
+        tooltip=[
+            alt.Tooltip("state_abbreviation:N", title="State"),
+            alt.Tooltip("year:Q", title="Year"),
+            alt.Tooltip("prop_cs:Q", title="Change", format=".2%"),
+        ],
+    )
+    .transform_filter(click)
+    .properties(
+        width=500,
+        height=200,
+        title=alt.TitleParams(
+            # Dynamic title via Vega expression
+            text=alt.expr(
+                "click.state_abbreviation ? click.state_abbreviation[0] + ' Trend' : 'Click Map to View Individual State Trends'"
+            ),
+            anchor="middle",
+        ),
+    )
+)
+```
+
+```{python}
+# | label: combined-dashboard
+
+dashboard = change_map & line_chart
+dashboard.show()
 ```
 
 ## Metadata
