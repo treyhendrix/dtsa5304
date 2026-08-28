@@ -2,7 +2,7 @@
 ETL Script for IPEDS CS Degrees
 Author: Trey Hendrix
 Date Started: 2026-08-23
-Date Updated: 2026-08-25
+Date Updated: 2026-08-27
 """
 
 # %% Modules
@@ -11,6 +11,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import scipeds
 from scipeds.constants import COMPLETIONS_TABLE
@@ -133,6 +134,34 @@ def get_ipeds_data() -> pd.DataFrame:
         "Returning proportion of CS bachelor's degrees by year for all public and non-profit institutions."
     )
     return prop_cs_df
+
+
+# %% Rainbow spaghetti fake data
+def get_rainbow_spaghetti_data(random_seed: int = 42):
+    """Generate fake 'spaghetti' data for a demonstration plot."""
+    np.random.seed(random_seed)
+    pastas = [
+        "Spaghetti",
+        "Penne",
+        "Rigatoni",
+        "Fettuccine",
+        "Farfalle",
+        "Ravioli",
+        "Linguine",
+        "Ziti",
+        "Angel Hair",
+        "Lasagne",
+    ]
+    pastas = sorted(pastas)
+    years = np.arange(1984, 2025)
+    pasta_df = pd.DataFrame(years, columns=["year"])
+    for pasta in pastas:
+        start_prop = np.random.uniform(0.1, 0.3)
+        slope = np.random.uniform(0.005, 0.015)
+        trend = start_prop + slope * (years - 1984)
+        noise = np.random.normal(0, 0.04, size=len(years))
+        pasta_df[pasta] = np.clip(trend + noise, 0, 1)
+    return pd.melt(pasta_df, id_vars="year", var_name="pasta", value_name="prop")
 
 
 # %% Default script behavior

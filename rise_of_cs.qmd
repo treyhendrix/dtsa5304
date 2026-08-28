@@ -16,10 +16,6 @@ This question is motivated and informed by the previous data projects I have wor
 
 Furthermore, as part of my previous IPEDS data project, I struggled to visualize the rich degrees granted IPEDS dataset efficiently. I wanted to maximize users' freedom to discover trends in the data across institutions. However, many visualizations used line plots, with multiple institutions shown in different colors, producing a "rainbow spaghetti" effect that obscured trends and likely discouraged exploration. Thus, for this project, I wanted to begin with a more focused question and a better understanding of effective visualization design, informed by Dr. Albers Szafir’s lectures.
 
-## IPEDS Data Information
-
-IPEDS is...
-
 ```{python}
 # | label: external-modules
 from datetime import datetime
@@ -32,10 +28,43 @@ from vega_datasets import data
 
 ```{python}
 # | label: local-modules
-from dtsa5304.etl import get_ipeds_data
+from dtsa5304.etl import get_ipeds_data, get_rainbow_spaghetti_data
 from dtsa5304.util import find_project_dir
 from dtsa5304.ref import fips_map
 ```
+
+
+```{python}
+# | label: rainbow-spaghetti
+pasta_selection = alt.selection_point(fields=["pasta"], bind="legend")
+rainbow_pasta_plot = (
+    alt.Chart(get_rainbow_spaghetti_data())
+    .mark_line(point=True)
+    .encode(
+        x=alt.X("year:Q", axis=alt.Axis(format="d"), title="Year"),
+        y=alt.Y("prop:Q", axis=alt.Axis(format="%"), title="Made-up Proportion"),
+        color=alt.Color(
+            "pasta:N", title="Pasta Shape", scale=alt.Scale(scheme="tableau10")
+        ),
+        tooltip=[
+            alt.Tooltip("pasta:N", title="Pasta Shape"),
+            alt.Tooltip("year:Q", title="Year"),
+            alt.Tooltip("prop:Q", title="Made-up Proportion", format=".2%"),
+        ],
+        opacity=alt.condition(pasta_selection, alt.value(1), alt.value(0.2)),
+    )
+    .properties(
+        width=500, height=400, title="Rainbow Spaghetti - Fake Data Shown Badly"
+    )
+    .add_params(pasta_selection)
+)
+
+rainbow_pasta_plot.show()
+```
+
+## IPEDS Data Information
+
+IPEDS is...
 
 To access these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
 
@@ -83,15 +112,17 @@ state_year_df["prop_cs"] = (
 
 Now, we have a much more managable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trendlines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
 
-Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python state_year_df["year"].min()}` to `{python state_year_df["year"].min()}`). 
+Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python} state_year_df["year"].min()` to `{python} state_year_df["year"].max()`). 
 
 ```{python}
 # | label: prop-change
-sorted_grouped_state_year_df = state_year_df.sort_values(by=["state_abbreviation", "year"]).groupby("state_abbreviation")
+sorted_grouped_state_year_df = state_year_df.sort_values(
+    by=["state_abbreviation", "year"]
+).groupby("state_abbreviation")
 
 all_time_prop_change_df = (
-    sorted_grouped_state_year_df["prop_cs"].last() - 
-    sorted_grouped_state_year_df["prop_cs"].first()
+    sorted_grouped_state_year_df["prop_cs"].last()
+    - sorted_grouped_state_year_df["prop_cs"].first()
 ).reset_index(name="prop_cs_change")
 ```
 
@@ -109,8 +140,10 @@ states = alt.topo_feature(data.us_10m.url, "states")
 max_abs_change = all_time_prop_change_df["prop_cs_change"].abs().max()
 
 click = alt.selection_point(
-    name="click", 
-    fields=["state_abbreviation"], value=[{"state_abbreviation": "NJ"}], empty=False
+    name="click",
+    fields=["state_abbreviation"],
+    value=[{"state_abbreviation": "NJ"}],
+    empty=False,
 )
 
 change_map = (
