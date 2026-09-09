@@ -2,7 +2,7 @@
 Reference Values for IPEDS CS Degree Analysis
 Author: Trey Hendrix
 Date Started: 2026-08-26
-Date Updated: 2026-08-26
+Date Updated: 2026-09-08
 """
 
 # %% Modules
@@ -94,3 +94,53 @@ fip_pattern = re.compile(r"\b(?P<abbrev>[A-Z]{2})\b\s+(?P<fips>[0-9]{2})\b")
 for line in raw_fip_text.splitlines():
     if line_match := fip_pattern.search(line):
         fips_map.update({line_match.group("abbrev"): line_match.group("fips")})
+
+# %% US regions
+# Source: https://www2.census.gov/geo/pdfs/maps-data/maps/reference/us_regdiv.pdf
+region_to_state_map = {
+    "West": [
+        "HI",
+        "AK",
+        "WA",
+        "OR",
+        "CA",
+        "NV",
+        "ID",
+        "MT",
+        "WY",
+        "UT",
+        "CO",
+        "AZ",
+        "NM",
+    ],
+    "Midwest": ["ND", "SD", "NE", "KS", "MO", "IA", "MN", "WI", "IL", "IN", "MI", "OH"],
+    "South": [
+        "TX",
+        "OK",
+        "AR",
+        "LA",
+        "MS",
+        "AL",
+        "TN",
+        "KY",
+        "WV",
+        "MD",
+        "DE",
+        "VA",
+        "NC",
+        "SC",
+        "GA",
+        "FL",
+    ],
+    "Northeast": ["NJ", "PA", "NY", "CT", "RI", "MA", "VT", "NH", "ME"],
+}
+
+state_to_region_map = {}
+for region, states in region_to_state_map.items():
+    for state in states:
+        state_to_region_map[state] = region
+
+if len(state_to_region_map) != 50:
+    raise ValueError(
+        f"We have {len(state_to_region_map)}/50 states in our dictionary. We must have made a transcription error."
+    )
