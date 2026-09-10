@@ -14,7 +14,7 @@ My data visualization project leverages the Integrated Postsecondary Education D
 
 This question is motivated and informed by the previous data projects I have worked on as part of my job in higher education administration. Of course, the "learn-to-code" phenomenon is a ubiquitous topic in higher education. Yet, I was still surprised to see the dramatic national trend in CS degrees in the dataset.
 
-Furthermore, as part of my previous IPEDS data project, I struggled to visualize the rich degrees granted IPEDS dataset efficiently. I wanted to maximize users' freedom to discover trends in the data across institutions. However, many visualizations used line plots, with multiple institutions shown in different colors, producing a "rainbow spaghetti" effect that obscured trends and likely discouraged exploration. Thus, for this project, I wanted to begin with a more focused question and a better understanding of effective visualization design, informed by Dr. Albers Szafir’s lectures.
+Furthermore, as part of my previous IPEDS data project, I struggled to visualize the rich degrees granted IPEDS dataset efficiently. I wanted to maximize users' freedom to discover trends in the data across institutions. However, many visualizations used line plots, with multiple institutions shown in different colors, producing a "rainbow spaghetti" effect that obscured trends and likely discouraged exploration. Thus, for this project, I wanted to begin with a more focused question and a better understanding of effective visualization design, informed by Dr. Albers Szafir’s lectures. A toy example of the "rainbow spaghetti" problem is below (after some Python setup):
 
 ```{python}
 # | label: external-modules
@@ -32,7 +32,6 @@ from dtsa5304.etl import get_ipeds_data, get_rainbow_spaghetti_data
 from dtsa5304.util import find_project_dir
 from dtsa5304.ref import fips_map, state_to_region_map
 ```
-
 
 ```{python}
 # | label: rainbow-spaghetti
@@ -62,11 +61,11 @@ rainbow_pasta_plot = (
 rainbow_pasta_plot.show()
 ```
 
-## IPEDS Data Information
+## Data Information
 
-IPEDS is...
+IPEDS is an annual data collection project conducted by the US Department of Education that gathers information from every college that participates in federal student aid programs (virtually all institutions). To answer our question about computer science, we are more interested in the IPEDS Completions components, which tracks degrees awarded using a special taxonomy that lets us compare apples-to-apples across institutions. We will use the "Computer Science" NCSES detailed field group to ensure that we collect information on many degrees that may not be simply named "Computer Science Major."
 
-To access these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
+To import these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
 
 ```{python}
 # | label: ipeds-etl
@@ -94,6 +93,10 @@ Descriptive statistics for the numeric columns:
 num_col_stats_df = prop_cs_df.drop(columns="unitid").describe()
 show(num_col_stats_df)
 ```
+
+## Goals 
+
+## Tasks
 
 To visualize geographic trends in these data, we will sumarize the data at the state-year level: 
 
