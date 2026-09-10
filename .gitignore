@@ -223,3 +223,6 @@ rise_of_cs.html
 
 # Data Directory
 data/
+
+# VS Code Settings
+.vscode/
