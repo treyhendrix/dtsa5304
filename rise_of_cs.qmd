@@ -30,7 +30,7 @@ from vega_datasets import data
 # | label: local-modules
 from dtsa5304.etl import get_ipeds_data, get_rainbow_spaghetti_data
 from dtsa5304.util import find_project_dir
-from dtsa5304.ref import fips_map
+from dtsa5304.ref import fips_map, state_to_region_map
 ```
 
 
@@ -228,6 +228,64 @@ line_chart = (
 
 dashboard = change_map & line_chart
 dashboard.show()
+```
+
+
+```{python}
+# | label: regions-rollup
+
+state_year_df = (
+    prop_cs_df.groupby(["year", "state_abbreviation"])
+    .agg(
+        cs_bachelors_degrees=("cs_bachelors_degrees", "sum"),
+        bachelors_degrees=("bachelors_degrees", "sum"),
+    )
+    .reset_index()
+)
+
+state_year_df["region"] = state_year_df["state_abbreviation"].map(state_to_region_map)
+
+region_year_df = (
+    state_year_df.groupby(["year", "region"])
+    .agg(
+        cs_bachelors_degrees=("cs_bachelors_degrees", "sum"),
+        bachelors_degrees=("bachelors_degrees", "sum"),
+    )
+    .reset_index()
+)  # Note: Territories are silently dropped here since they are not part of the census regions
+
+region_year_df["prop_cs"] = (
+    region_year_df["cs_bachelors_degrees"] / region_year_df["bachelors_degrees"]
+)
+```
+
+```{python}
+# | label: region-plot
+region_selection = alt.selection_point(fields=["region"], bind="legend")
+
+region_chart = (
+    alt.Chart(region_year_df)
+    .mark_line(point=True)
+    .encode(
+        x=alt.X("year:Q", axis=alt.Axis(format="d"), title="Year"),
+        y=alt.Y("prop_cs:Q", axis=alt.Axis(format="%"), title="Proportion"),
+        color=alt.Color("region:N", title="Region"),
+        tooltip=[
+            alt.Tooltip("region:N", title="Region"),
+            alt.Tooltip("year:Q", title="Year"),
+            alt.Tooltip("prop_cs:Q", title="Change", format=".2%"),
+        ],
+        opacity=alt.condition(region_selection, alt.value(1), alt.value(0.2)),
+    )
+    .properties(
+        width=500,
+        height=400,
+        title="Regional CS Trend",
+    )
+    .add_params(region_selection)
+)
+
+region_chart.show()
 ```
 
 ## Metadata
