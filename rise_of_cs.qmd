@@ -130,6 +130,13 @@ all_time_prop_change_df = (
 ```
 
 ```{python}
+# | label: saving-plots-setup
+
+PROJECT_DIR = find_project_dir()
+PLOTS_DIR = PROJECT_DIR / "plots"
+```
+
+```{python}
 # | label: map-setup
 
 # Add 2-digit FIPS id column to our IPEDS data
@@ -230,6 +237,7 @@ line_chart = (
 # | label: combined-dashboard
 
 dashboard = change_map & line_chart
+dashboard.save(PLOTS_DIR / "map_dashboard.html")
 dashboard.show()
 ```
 
