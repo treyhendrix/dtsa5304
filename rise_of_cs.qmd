@@ -206,7 +206,7 @@ change_map = (
 ```{python}
 # | label: state-trend-plot
 
-line_chart = (
+state_chart = (
     alt.Chart(state_year_df)
     .mark_line(point=True)
     .encode(
@@ -236,7 +236,7 @@ line_chart = (
 ```{python}
 # | label: combined-dashboard
 
-dashboard = change_map & line_chart
+dashboard = change_map & state_chart
 dashboard.save(PLOTS_DIR / "map_dashboard.html")
 dashboard.show()
 ```
@@ -296,6 +296,7 @@ region_chart = (
     .add_params(region_selection)
 )
 
+region_chart.save(PLOTS_DIR / "regions.html")
 region_chart.show()
 ```
 
