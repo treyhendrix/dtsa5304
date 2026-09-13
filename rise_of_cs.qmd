@@ -10,7 +10,7 @@ format:
 
 ## Introduction
 
-My data visualization project leverages the Integrated Postsecondary Education Data System (IPEDS) dataset to answer the question: when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically and across institutions?
+My data visualization project leverages the Integrated Postsecondary Education Data System (IPEDS) dataset to answer the question: **when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically?**
 
 This question is motivated and informed by the previous data projects I have worked on as part of my job in higher education administration. Of course, the "learn-to-code" phenomenon is a ubiquitous topic in higher education. Yet, I was still surprised to see the dramatic national trend in CS degrees in the dataset.
 
@@ -94,11 +94,22 @@ num_col_stats_df = prop_cs_df.drop(columns="unitid").describe()
 show(num_col_stats_df)
 ```
 
-## Goals 
+## Goals and Tasks
 
-## Tasks
+The project aims to address to complementary questions with the IPEDS dataset: 
 
-To visualize geographic trends in these data, we will sumarize the data at the state-year level: 
+1. When did CS become such a popular undergraduate degree?
+2. How has the popularity varied geographically?
+
+To accomplish these goals without creating "rainbow spaghetti", I will design my visualizations with the following tasks in mind: 
+
+The hope is that this map will accomplish three of the seven types of interaction that we discussed in lecutre: 
+
+* Explore: click a state to see its individual trend. Additionally, hover over individual years in the linked line plot... 
+* Abstract/Elaborate: the color of a state on the map is a single summary statistic (all time change in the percent of CS degrees), but the linked line plot shows the complete shape of the metric over time. We called this "Overview + Detail" in lecture. 
+* Filter: by default, the linked line plot only shows one state at a time.
+
+To visualize geographic trends in these data, we will summarize the data at the state-year level: 
 
 ```{python}
 # | label: state-year-roll-up
@@ -113,7 +124,7 @@ state_year_df["prop_cs"] = (
 )
 ```
 
-Now, we have a much more managable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trendlines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
+Now, we have a much more manageable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trend lines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
 
 Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python} state_year_df["year"].min()` to `{python} state_year_df["year"].max()`). 
 
