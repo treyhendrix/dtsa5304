@@ -8,7 +8,7 @@ format:
         toc: true
 ---
 
-## Introduction
+# Introduction
 
 My data visualization project leverages the Integrated Postsecondary Education Data System (IPEDS) dataset to answer the question: **when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically?**
 
@@ -61,7 +61,7 @@ rainbow_pasta_plot = (
 rainbow_pasta_plot.show()
 ```
 
-## Data Information
+# Data Information
 
 IPEDS is an annual data collection project conducted by the US Department of Education that gathers information from every college that participates in federal student aid programs (virtually all institutions). To answer our question about computer science, we are more interested in the IPEDS Completions components, which tracks degrees awarded using a special taxonomy that lets us compare apples-to-apples across institutions. We will use the "Computer Science" NCSES detailed field group to ensure that we collect information on many degrees that may not be simply named "Computer Science Major."
 
@@ -94,20 +94,25 @@ num_col_stats_df = prop_cs_df.drop(columns="unitid").describe()
 show(num_col_stats_df)
 ```
 
-## Goals and Tasks
+# Goals and Tasks
 
 The project aims to address to complementary questions with the IPEDS dataset: 
 
 1. When did CS become such a popular undergraduate degree?
 2. How has the popularity varied geographically?
 
-To accomplish these goals without creating "rainbow spaghetti", I will design my visualizations with the following tasks in mind: 
+To accomplish these goals without creating "rainbow spaghetti", I will design my visualizations with the following task in mind: **I will focus on the state-level or detail in our dataset, and allow users to find large-scale patterns between states (e.g., identify states with similar trends) while also navigating between states and identifying small-scale (e.g., change over time within a state).**
 
-The hope is that this map will accomplish three of the seven types of interaction that we discussed in lecutre: 
+Using the task taxonomy that we learned in lecture, we can break this task down into the following components: 
 
-* Explore: click a state to see its individual trend. Additionally, hover over individual years in the linked line plot... 
-* Abstract/Elaborate: the color of a state on the map is a single summary statistic (all time change in the percent of CS degrees), but the linked line plot shows the complete shape of the metric over time. We called this "Overview + Detail" in lecture. 
-* Filter: by default, the linked line plot only shows one state at a time.
+1. Purpose: Explore the IPEDS dataset and confirm (or challenge) the "rise of CS" phenomenon
+2. Means: Users navigate among states and cross reference a nationwide summary of the data. Users compare one state to another in an order that makes sense to them.
+3. Data Characteristics: the task seeks to understand how the distribution of CS degrees has changed over time and space. On a low-level, we are comparing time series between states. 
+4. Target Data: States are compared and data are normalized to be proportions (CS bachelor's degrees / total bachelor's degrees).
+5. Workflow: Users identify outliers or clumps of related states, investigate in the per-state trends, snowballing additional questions about the dataset. 
+6. Roles: I have designed the visualizations for a general audience, but the visualization is implicitly geared towards Americans, or those familiar with US geography since the visualization is less meaningful without that context. 
+
+# Visualizations 
 
 To visualize geographic trends in these data, we will summarize the data at the state-year level: 
 
@@ -147,6 +152,7 @@ PROJECT_DIR = find_project_dir()
 PLOTS_DIR = PROJECT_DIR / "plots"
 ```
 
+## Map Dashboard 
 ```{python}
 # | label: map-setup
 
@@ -252,6 +258,9 @@ dashboard.save(PLOTS_DIR / "map_dashboard.html")
 dashboard.show()
 ```
 
+## Regions Plot 
+
+Reviewing the map above, a natural question arises about whether different regions in the US have similar trends in CS degrees awarded. In the map, this would manifest as clumps of states having similar colors. In the per-state plot, we would notice neighboring states having a similar shape. However, a more thorough and direct way to approach this question is to aggregate the data into meaningful regions and plot the result on the same plot. To do this, I will use the four regions defined by the US census:
 
 ```{python}
 # | label: regions-rollup
@@ -311,8 +320,41 @@ region_chart.save(PLOTS_DIR / "regions.html")
 region_chart.show()
 ```
 
-## Metadata
+The different regions have a remarkably similar trend through time. Again, we see two peaks - one around 1985 and one in the early 2000s - and a steap and steady increase between 2010 and 2024. The baseline level for the Northeast does seem to be consistently higher than the other regions, but the difference is small, suggesting broad uniformity in the "rise of CS" across these regions. 
+
+# Design Summary and Justification 
+
+## Map Dashboard 
+
+The hope is that this map will accomplish three of the seven types of interaction that we discussed in lecutre: 
+
+* Explore: click a state to see its individual trend. Additionally, hover over individual years in the linked line plot... 
+* Abstract/Elaborate: the color of a state on the map is a single summary statistic (all time change in the percent of CS degrees), but the linked line plot shows the complete shape of the metric over time. We called this "Overview + Detail" in lecture. 
+* Filter: by default, the linked line plot only shows one state at a time.
+
+## Regions Plot
+
+...
+
+# Final Evaluation Approach
+For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_url) geared towards a general audience to gauge the effectiveness of my visualizations. The survey presented my visualizations and asked X questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions is below. 
+
+1. Data background: How would you describe your level of comfort and experience working with data? 
+    + Motivation: I wanted to ensure that my visualizations are approachable to a general audience and was curious if data professionals had different feedback. 
+    + Responses: X participants identified as data professionals
+2. Background understanding: What statistic is shown by the fill color of each state? (multiple choice)
+    + Motivation: 
+    + Responses: X of Y participants selected the correct response. 
+3. How many states did you click on... 
+
+# Synthesis of Final Evaluation 
+...
+
+# Metadata
 
 This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
 
 
+# TODOs 
+
+* 2026-09-13T11:49:14-0400 Add the actual number of CS degrees and bachelor's degree to tooltips for the trend plots 
