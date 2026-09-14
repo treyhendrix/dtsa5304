@@ -276,6 +276,11 @@ region_year_df = (
     .reset_index()
 )  # Note: Territories are silently dropped here since they are not part of the census regions
 
+region_year_df["prop_desc"] = region_year_df.apply(
+    lambda row: f"{row['cs_bachelors_degrees']:,.0f} of {row['bachelors_degrees']:,.0f} degrees", 
+    axis=1,
+)
+
 region_year_df["prop_cs"] = (
     region_year_df["cs_bachelors_degrees"] / region_year_df["bachelors_degrees"]
 )
@@ -295,7 +300,8 @@ region_chart = (
         tooltip=[
             alt.Tooltip("region:N", title="Region"),
             alt.Tooltip("year:Q", title="Year"),
-            alt.Tooltip("prop_cs:Q", title="Change", format=".2%"),
+            alt.Tooltip("prop_cs:Q", title="Proportion", format=".2%"),
+            alt.Tooltip("prop_desc", title="Count")
         ],
         opacity=alt.condition(region_selection, alt.value(1), alt.value(0.2)),
     )
@@ -348,4 +354,5 @@ This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York"
 
 # TODOs 
 
-* 2026-09-13T11:49:14-0400 Add the actual number of CS degrees and bachelor's degree to tooltips for the trend plots 
+* 2026-09-13T11:49:14-0400 Add the actual number of CS degrees and bachelor's degree to tooltips for the trend plots
+    + Added to regions plot 
