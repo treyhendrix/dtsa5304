@@ -127,6 +127,11 @@ state_year_df = (
 state_year_df["prop_cs"] = (
     state_year_df["cs_bachelors_degrees"] / state_year_df["bachelors_degrees"]
 )
+
+state_year_df["prop_desc"] = state_year_df.apply(
+    lambda row: f"{row['cs_bachelors_degrees']:,.0f} of {row['bachelors_degrees']:,.0f} degrees", 
+    axis=1,
+)
 ```
 
 Now, we have a much more manageable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trend lines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
@@ -232,7 +237,8 @@ state_chart = (
         tooltip=[
             alt.Tooltip("state_abbreviation:N", title="State"),
             alt.Tooltip("year:Q", title="Year"),
-            alt.Tooltip("prop_cs:Q", title="Change", format=".2%"),
+            alt.Tooltip("prop_cs:Q", title="Proportion", format=".2%"),
+            alt.Tooltip("prop_desc:N", title="Count")
         ],
     )
     .transform_filter(click)
@@ -301,7 +307,7 @@ region_chart = (
             alt.Tooltip("region:N", title="Region"),
             alt.Tooltip("year:Q", title="Year"),
             alt.Tooltip("prop_cs:Q", title="Proportion", format=".2%"),
-            alt.Tooltip("prop_desc", title="Count")
+            alt.Tooltip("prop_desc:N", title="Count")
         ],
         opacity=alt.condition(region_selection, alt.value(1), alt.value(0.2)),
     )
@@ -350,9 +356,3 @@ For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_ur
 # Metadata
 
 This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
-
-
-# TODOs 
-
-* 2026-09-13T11:49:14-0400 Add the actual number of CS degrees and bachelor's degree to tooltips for the trend plots
-    + Added to regions plot 
