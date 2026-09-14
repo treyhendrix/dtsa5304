@@ -265,15 +265,6 @@ Reviewing the map above, a natural question arises about whether different regio
 ```{python}
 # | label: regions-rollup
 
-state_year_df = (
-    prop_cs_df.groupby(["year", "state_abbreviation"])
-    .agg(
-        cs_bachelors_degrees=("cs_bachelors_degrees", "sum"),
-        bachelors_degrees=("bachelors_degrees", "sum"),
-    )
-    .reset_index()
-)
-
 state_year_df["region"] = state_year_df["state_abbreviation"].map(state_to_region_map)
 
 region_year_df = (
