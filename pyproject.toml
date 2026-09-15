@@ -17,3 +17,7 @@ dependencies = [
 [build-system]
 requires = ["uv-build>=0.5.0"]
 build-backend = "uv_build"
+
+[tool.pyrefly]
+python-interpreter-path = ".venv/bin/python"
+search_path = "src"
