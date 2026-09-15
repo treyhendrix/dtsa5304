@@ -323,13 +323,13 @@ region_chart.save(PLOTS_DIR / "regions.html")
 region_chart.show()
 ```
 
-The different regions have a remarkably similar trend through time. Again, we see two peaks - one around 1985 and one in the early 2000s - and a steap and steady increase between 2010 and 2024. The baseline level for the Northeast does seem to be consistently higher than the other regions, but the difference is small, suggesting broad uniformity in the "rise of CS" across these regions. 
+The different regions have a remarkably similar trend through time. Again, we see two peaks - one around 1985 and one in the early 2000s - and a steep and steady increase between 2010 and 2024. The baseline level for the Northeast does seem to be consistently higher than the other regions, but the difference is small, suggesting broad uniformity in the "rise of CS" across these regions. 
 
 # Design Summary and Justification 
 
 ## Map Dashboard 
 
-The hope is that this map will accomplish three of the seven types of interaction that we discussed in lecutre: 
+The hope is that this map will accomplish three of the seven types of interaction that we discussed in lecture: 
 
 * Explore: click a state to see its individual trend. Additionally, hover over individual years in the linked line plot... 
 * Abstract/Elaborate: the color of a state on the map is a single summary statistic (all time change in the percent of CS degrees), but the linked line plot shows the complete shape of the metric over time. We called this "Overview + Detail" in lecture. 
