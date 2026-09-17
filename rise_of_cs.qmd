@@ -136,7 +136,7 @@ state_year_df["prop_desc"] = state_year_df.apply(
 
 Now, we have a much more manageable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trend lines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
 
-Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python} state_year_df["year"].min()` to `{python} state_year_df["year"].max()`). 
+Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python} str(state_year_df["year"].min())` to `{python} str(state_year_df["year"].max())`). 
 
 ```{python}
 # | label: prop-change
@@ -195,7 +195,7 @@ change_map = (
                 offset=0,
                 direction="horizontal",
                 gradientLength=450,
-                title="All Time Change in Percent of Bachelor's Degrees Awarded in CS",
+                title="All-Time Change in Percent of Bachelor's Degrees Awarded in CS",
                 titleOrient="top",
                 titleAnchor="middle",
                 titleLimit=450,
@@ -345,7 +345,7 @@ The hope is that this map will accomplish three of the seven types of interactio
 I decided to make this visualization to interrogate an observation I had while making the map dashboard: computer science's popularity seemed to have increased only slightly or even decreased in the south, overall. The regions plot makes this implicit synthesis an explicit comparison, sacrificing the exploratory focus of the map dashboard for a fixed set of marks that illustrate few noticeable differences between the regions. In lecture, we learned that heavily interactive plots (like the map dashboard requiring clicking through states) require a high degree of use attention and memory. On the other hand, the regions plot capture the comparison that we want to make in the "gist" of the visualization (i.e., at a glance).The design of this plot was also heavily influenced by my desire to compare time series data without creating a "rainbow spaghetti" effect, which is hopefully mitigated by only having four series present in the plot.
 
 # Final Evaluation Approach
-For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_url) geared towards a general audience to gauge the effectiveness of my visualizations. The survey presented my visualizations and asked X questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions is below. 
+For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_url) geared towards a general audience to gauge the effectiveness of my visualizations. The survey presented my visualizations and asked X questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions is below (please note that the map dashboard is plot A in the survey while the region plot is plot B). 
 
 1. On a scale of 1 to 10 how would you describe your level of comfort and experience working with data (1 = uncomfortable/minimal experience; 10 = very comfortable/experienced)? 
     + Motivation: Ensure that the visualizations are approachable to a general audience and determine if data professionals had different feedback 
@@ -355,10 +355,11 @@ For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_ur
     + Responses: 
 3. Plot A: On a scale of 1 to 10, how confident are you that you understand the statistic that determines the color of each state in the map (1 = not confident at all; 10 = very confident)? 
     + Motivation: I wanted to see if users understood the potentially confusing all time change statistic. 
-4. Plot A: Do you see evidence of neighboring states showing similar trends in the "rise of CS?" Why or why not? 
+    + Responses:
+4. Plot A: Do you see evidence of neighboring states showing similar trends in the "rise of CS"? Why or why not? 
     + Motivation: Test my own conclusions/interpretation and the plot's effectiveness
     + Responses:
-5. Plot A: On a scale of 1 to 10, how useful do you find this plot in answering our research questions (in bold above; 1 = not useful at all; 10 = extremely useful)?
+5. Plot A: On a scale of 1 to 10, how useful do you find this plot in answering our research questions (1 = not useful at all; 10 = extremely useful)?
     + Motivation: General visualization effectiveness
     + Responses:
 6. Plot A: Please provide any additional feedback on plot A below (optional).
@@ -367,7 +368,7 @@ For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_ur
 7. Plot B: Do you think "the rise of CS" has varied across the four regions shown in this plot? Why or why not? 
     + Motivation: Test my own conclusions/interpretation and the plot's effectiveness
     + Responses:
-8. Plot B: On a scale of 1 to 10, how useful do you find this plot in answering our research questions (in bold above; 1 = not useful at all; 10 = extremely useful)?
+8. Plot B: On a scale of 1 to 10, how useful do you find this plot in answering our research questions (1 = not useful at all; 10 = extremely useful)?
     + Motivation: General visualization effectiveness
     + Responses:
 9. Plot B: Please provide any additional feedback on plot B below (optional).
@@ -379,11 +380,12 @@ For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_ur
 
 
 # Synthesis
-## Final Evaluation Synthesis
-..
+## Conclusions from Final Evaluation
+TODO add this after survey results come in. 
 
-## Evolution 
-...
+## Evolution of Project
+
+The scope and goals of this project shifted over the course of the term. In module 1 when we selected our data source, I originally planned to present data from individual institutions (i.e., universities) to understand more fine-scale variation in CS over time. However, once I started working with the data, I decided to respect the recommendation to keep datasets below 5K rows to not overburden `altair`. In module 2, we defined more specific tasks for our visualizations. I originally planned to integrate my plots into a dashboard such that the regions aggregation was manual (users clicked on states to define a region, which then populates a line plot). I scaled this back significantly and relied on predefined regions in order to be able to show the code, visualizations, and narrative all together (in this `qmd`) and simplify the workflow. In module 3, my evaluation approach changed slightly. I originally envisioned asking more experimental evaluation (e.g., testing if users are pulling correct statistics from plots), but anticipating a small sample size, and ultimately went with a qualitative evaluation and wanted to make the survey relatively quick and easy to fill out. 
 
 # Metadata
 
