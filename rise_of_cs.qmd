@@ -134,6 +134,29 @@ state_year_df["prop_desc"] = state_year_df.apply(
 )
 ```
 
+```{python}
+# | label: validate date range
+
+# Confirm that all states in our map have min date = 1984 and max date = 2024 (stated in the report text)
+state_max_min_year_df = (
+    state_year_df.groupby("state_abbreviation")
+    .agg(min_year=("year", "min"), max_year=("year", "max"))
+    .reset_index()
+)
+
+unexpected_range_states_df = state_max_min_year_df.loc[
+    (state_max_min_year_df["state_abbreviation"].isin(state_to_region_map))
+    & (
+        (state_max_min_year_df["min_year"] != 1984)
+        | (state_max_min_year_df["max_year"] != 2024)
+    )
+]
+if not unexpected_range_states_df.empty:
+    raise ValueError(
+        f"{unexpected_range_states_df.shape[0]} state(s) detected with unexpected date ranges."
+    )
+```
+
 Now, we have a much more manageable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trend lines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
 
 Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python} str(state_year_df["year"].min())` to `{python} str(state_year_df["year"].max())`). 
