@@ -20,4 +20,4 @@ build-backend = "uv_build"
 
 [tool.pyrefly]
 python-interpreter-path = ".venv/bin/python"
-search_path = "src"
+search_path = ["src"]
