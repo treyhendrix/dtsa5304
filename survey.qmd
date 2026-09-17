@@ -12,15 +12,24 @@ format:
 
 Thank you for participating in my data visualization survey. This document contains two interactive plots that accompany the [Google Form](TODO_placeholder_url) survey. 
 
-## Plot A: Rise of CS - Map
+These visualizations aim to answer the question: **when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically?** They use data from the Department of Education (specifically, Integrated Postsecondary Education Data System or IPEDS) regarding the number of bachelor's degrees and CS bachelor's degrees awarded in each state between the years 1984 and 2024. 
+
+Plot A displays a map that shows the percentage of bachelor's degrees awarded in CS in 2024 minus the percentage of bachelor's degrees awarded in CS in 1984 (i.e., how much CS's share of degrees grew in each state from 1984 to 2024). Below the map, the year-by-year trend of percent CS degrees is shown for a selected state. 
+
+Plot B aggregates data into four broad regions and shows the year-by-year trend in the percent of regional bachelor's degrees going to CS students. 
+
+## Plot A: Rise of CS - Map Dashboard
 
 ```{=html}
 <iframe src="plots/map_dashboard.html" width="100%" height="800" scrolling="no" style="border:none; overflow:hidden;"></iframe>
 ```
 
 
-## Plot B: Rise of CS - Regions
+## Plot B: Rise of CS - Regions Plot
 
 ```{=html}
 <iframe src="plots/regions.html" width="100%" height="450" scrolling="no" style="border:none; overflow:hidden;"></iframe>
 ```
+
+
+This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
