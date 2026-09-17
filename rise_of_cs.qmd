@@ -264,6 +264,11 @@ dashboard.save(PLOTS_DIR / "map_dashboard.html")
 dashboard.show()
 ```
 
+While I was clicking around this map, I noted the diversity of trends among the states: 
+
+* First, there is no strong regional patterns in the all time change metric, except potentially in the south, which I will investigate further below. 
+* Second, most states follow a pattern where CS degrees decreased from a previous of relative popularity early in the dataset (1980s and 1990s), there is a sharp increase and decrease shortly after 2000 (the famous "dot-com bubble"), and a steady fairly consistent increase to a global maximum from 2010 until the end of the dataset. 
+
 ## Regions Plot 
 
 Reviewing the map above, a natural question arises about whether different regions in the US have similar trends in CS degrees awarded. In the map, this would manifest as clumps of states having similar colors. In the per-state plot, we would notice neighboring states having a similar shape. However, a more thorough and direct way to approach this question is to aggregate the data into meaningful regions and plot the result on the same plot. To do this, I will use the four regions defined by the US census:
@@ -331,26 +336,33 @@ The different regions have a remarkably similar trend through time. Again, we se
 
 The hope is that this map will accomplish three of the seven types of interaction that we discussed in lecture: 
 
-* Explore: click a state to see its individual trend. Additionally, hover over individual years in the linked line plot... 
+* Explore: click a state to see its individual trend. Additionally, hover over individual years in the linked line plot to view details such as the exact number of degrees granted in each state in each year. 
 * Abstract/Elaborate: the color of a state on the map is a single summary statistic (all time change in the percent of CS degrees), but the linked line plot shows the complete shape of the metric over time. We called this "Overview + Detail" in lecture. 
 * Filter: by default, the linked line plot only shows one state at a time.
 
 ## Regions Plot
 
-...
+I decided to make this visualization to interrogate an observation I had while making the map dashboard: computer science's popularity seemed to have increased only slightly or even decreased in the south, overall. The regions plot makes this implicit synthesis an explicit comparison, sacrificing the exploratory focus of the map dashboard for a fixed set of marks that illustrate few noticeable differences between the regions. In lecture, we learned that heavily interactive plots (like the map dashboard requiring clicking through states) require a high degree of use attention and memory. On the other hand, the regions plot capture the comparison that we want to make in the "gist" of the visualiation (i.e., at a glance).The design of this plot was also heavily influenced by my desire to compare time series data without creating a "rainbow spaghetti" effect, which is hopefully mitigated by only having four series present in the plot.
 
 # Final Evaluation Approach
 For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_url) geared towards a general audience to gauge the effectiveness of my visualizations. The survey presented my visualizations and asked X questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions is below. 
 
-1. Data background: How would you describe your level of comfort and experience working with data? 
+1. How would you describe your level of comfort and experience working with data? 
     + Motivation: I wanted to ensure that my visualizations are approachable to a general audience and was curious if data professionals had different feedback. 
     + Responses: X participants identified as data professionals
+2. When viewed the plot A, how many states did you click on? 
+3. 
+4. 
 2. Background understanding: What statistic is shown by the fill color of each state? (multiple choice)
     + Motivation: 
     + Responses: X of Y participants selected the correct response. 
-3. How many states did you click on... 
 
-# Synthesis of Final Evaluation 
+
+# Synthesis
+## Final Evaluation Synthesis
+..
+
+## Evolution 
 ...
 
 # Metadata
