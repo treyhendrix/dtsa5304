@@ -1,5 +1,5 @@
 ---
-title: The Rise of the Computer Science
+title: The Rise of Computer Science
 author: Trey Hendrix
 date: last-modified
 format: 
@@ -14,7 +14,7 @@ My data visualization project leverages the Integrated Postsecondary Education D
 
 This question is motivated and informed by the previous data projects I have worked on as part of my job in higher education administration. Of course, the "learn-to-code" phenomenon is a ubiquitous topic in higher education. Yet, I was still surprised to see the dramatic national trend in CS degrees in the dataset.
 
-Furthermore, as part of my previous IPEDS data project, I struggled to visualize the rich degrees granted IPEDS dataset efficiently. I wanted to maximize users' freedom to discover trends in the data across institutions. However, many visualizations used line plots, with multiple institutions shown in different colors, producing a "rainbow spaghetti" effect that obscured trends and likely discouraged exploration. Thus, for this project, I wanted to begin with a more focused question and a better understanding of effective visualization design, informed by Dr. Albers Szafir’s lectures. A toy example of the "rainbow spaghetti" problem is below (after some Python setup):
+Furthermore, as part of my previous IPEDS data project, I struggled to visualize the rich, degrees-granted IPEDS dataset efficiently. I wanted to maximize users' freedom to discover trends in the data across institutions. However, many visualizations used line plots, with multiple institutions shown in different colors, producing a "rainbow spaghetti" effect that obscured trends and likely discouraged exploration. Thus, for this project, I wanted to begin with a more focused question and a better understanding of effective visualization design, informed by Dr. Albers Szafir’s lectures. A toy example of the "rainbow spaghetti" problem is below (after some Python setup):
 
 ```{python}
 # | label: external-modules
@@ -63,7 +63,7 @@ rainbow_pasta_plot.show()
 
 # Data Information
 
-IPEDS is an annual data collection project conducted by the US Department of Education that gathers information from every college that participates in federal student aid programs (virtually all institutions). To answer our question about computer science, we are more interested in the IPEDS Completions components, which tracks degrees awarded using a special taxonomy that lets us compare apples-to-apples across institutions. We will use the "Computer Science" NCSES detailed field group to ensure that we collect information on many degrees that may not be simply named "Computer Science Major."
+IPEDS is an annual data collection project conducted by the US Department of Education that gathers information from every college that participates in federal student aid programs (virtually all institutions). To answer our question about computer science, we are more interested in the IPEDS Completions component, which tracks degrees awarded using a special taxonomy that lets us compare apples-to-apples across institutions. We will use the "Computer Science" NCSES detailed field group to ensure that we collect information on many degrees that may not be simply named "Computer Science Major."
 
 To import these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
 
@@ -72,7 +72,7 @@ To import these data, I leverage the excellent `scipeds` package, which utilizes
 prop_cs_df = get_ipeds_data()
 ```
 
-Our basic dataset is fairly simple: for each non-profit or public institution in the IPEDS database, we have yearly counts of Bachelor's degrees and Computer Science Bachelor's degrees. The dataset is fairly large, with `{python} f"{prop_cs_df.shape[0]:,}"` rows, so I will show only the largest (by Bachelor's degrees award) institution in each state below for the latest survey year:
+Our basic dataset is fairly simple: for each non-profit or public institution in the IPEDS database, we have yearly counts of Bachelor's degrees and Computer Science Bachelor's degrees. The dataset is fairly large, with `{python} f"{prop_cs_df.shape[0]:,}"` rows, so I will show only the largest (by Bachelor's degrees awarded) institution in each state below for the latest survey year:
 
 ```{python}
 # | label: state-sample
@@ -96,12 +96,12 @@ show(num_col_stats_df)
 
 # Goals and Tasks
 
-The project aims to address to complementary questions with the IPEDS dataset: 
+The project aims to address two complementary questions with the IPEDS dataset: 
 
 1. When did CS become such a popular undergraduate degree?
 2. How has the popularity varied geographically?
 
-To accomplish these goals without creating "rainbow spaghetti", I will design my visualizations with the following task in mind: **I will focus on the state-level or detail in our dataset, and allow users to find large-scale patterns between states (e.g., identify states with similar trends) while also navigating between states and identifying small-scale (e.g., change over time within a state).**
+To accomplish these goals without creating "rainbow spaghetti", I will design my visualizations with the following task in mind: **I will focus on the state-level of detail in our dataset, and allow users to find large-scale patterns between states (e.g., identify states with similar trends) while also navigating between states and identifying small-scale patterns (e.g., change over time within a state).**
 
 Using the task taxonomy that we learned in lecture, we can break this task down into the following components: 
 
@@ -109,10 +109,10 @@ Using the task taxonomy that we learned in lecture, we can break this task down 
 2. Means: Users navigate among states and cross reference a nationwide summary of the data. Users compare one state to another in an order that makes sense to them.
 3. Data Characteristics: the task seeks to understand how the distribution of CS degrees has changed over time and space. On a low-level, we are comparing time series between states. 
 4. Target Data: States are compared and data are normalized to be proportions (CS bachelor's degrees / total bachelor's degrees).
-5. Workflow: Users identify outliers or clumps of related states, investigate in the per-state trends, snowballing additional questions about the dataset. 
+5. Workflow: Users identify outliers or clumps of related states, investigate the per-state trends, snowballing additional questions about the dataset. 
 6. Roles: I have designed the visualizations for a general audience, but the visualization is implicitly geared towards Americans, or those familiar with US geography since the visualization is less meaningful without that context. 
 
-# Visualizations 
+# Visualizations
 
 To visualize geographic trends in these data, we will summarize the data at the state-year level: 
 
@@ -159,7 +159,7 @@ if not unexpected_range_states_df.empty:
 
 Now, we have a much more manageable `{python} f"{state_year_df.shape[0]:,}"` rows of data. However, viewing 50+ trend lines is still in the realm of "rainbow spaghetti." To get these data on a 2-D map, we need to arrive at a single metric for each state. 
 
-Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degree changed the most over the course of our dataset (i.e., from `{python} str(state_year_df["year"].min())` to `{python} str(state_year_df["year"].max())`). 
+Since our research question involves the "rise of CS", we can ask: where has the percentage of CS degrees changed the most over the course of our dataset (i.e., from `{python} str(state_year_df["year"].min())` to `{python} str(state_year_df["year"].max())`). 
 
 ```{python}
 # | label: prop-change
@@ -180,7 +180,7 @@ PROJECT_DIR = find_project_dir()
 PLOTS_DIR = PROJECT_DIR / "plots"
 ```
 
-## Map Dashboard 
+## Map Dashboard
 ```{python}
 # | label: map-setup
 
@@ -242,7 +242,7 @@ change_map = (
         height=400,
     )
     .project(
-        type="albersUsa"  # Note: The territories (e.g, Guam) are dropped here, unfortunately
+        type="albersUsa"  # Note: The territories (e.g., Guam) are dropped here, unfortunately
     )
     .add_params(click)
 )
@@ -289,10 +289,10 @@ dashboard.show()
 
 While I was clicking around this map, I noted the diversity of trends among the states: 
 
-* First, there is no strong regional patterns in the all time change metric, except potentially in the south, which I will investigate further below. 
-* Second, most states follow a pattern where CS degrees decreased from a previous of relative popularity early in the dataset (1980s and 1990s), there is a sharp increase and decrease shortly after 2000 (the famous "dot-com bubble"), and a steady fairly consistent increase to a global maximum from 2010 until the end of the dataset. 
+* First, there are no strong regional patterns in the all time change metric, except potentially in the south, which I will investigate further below. 
+* Second, most states follow a pattern where CS degrees decreased from a previous period of relative popularity early in the dataset (1980s and 1990s), there is a sharp increase and decrease shortly after 2000 (the famous "dot-com bubble"), and a steady fairly consistent increase to a global maximum from 2010 until the end of the dataset. 
 
-## Regions Plot 
+## Regions Plot
 
 Reviewing the map above, a natural question arises about whether different regions in the US have similar trends in CS degrees awarded. In the map, this would manifest as clumps of states having similar colors. In the per-state plot, we would notice neighboring states having a similar shape. However, a more thorough and direct way to approach this question is to aggregate the data into meaningful regions and plot the result on the same plot. To do this, I will use the four regions defined by the US census:
 
@@ -365,12 +365,12 @@ The hope is that this map will accomplish three of the seven types of interactio
 
 ## Regions Plot
 
-I decided to make this visualization to interrogate an observation I had while making the map dashboard: computer science's popularity seemed to have increased only slightly or even decreased in the south, overall. The regions plot makes this implicit synthesis an explicit comparison, sacrificing the exploratory focus of the map dashboard for a fixed set of marks that illustrate few noticeable differences between the regions. In lecture, we learned that heavily interactive plots (like the map dashboard requiring clicking through states) require a high degree of use attention and memory. On the other hand, the regions plot capture the comparison that we want to make in the "gist" of the visualization (i.e., at a glance).The design of this plot was also heavily influenced by my desire to compare time series data without creating a "rainbow spaghetti" effect, which is hopefully mitigated by only having four series present in the plot.
+I decided to make this visualization to interrogate an observation I had while making the map dashboard: computer science's popularity seemed to have increased only slightly or even decreased in the south, overall. The regions plot makes this implicit synthesis an explicit comparison, sacrificing the exploratory focus of the map dashboard for a fixed set of marks that illustrate few noticeable differences between the regions. In lecture, we learned that heavily interactive plots (like the map dashboard requiring clicking through states) require a high degree of user attention and memory. On the other hand, the regions plot captures the comparison that we want to make in the "gist" of the visualization (i.e., at a glance). The design of this plot was also heavily influenced by my desire to compare time series data without creating a "rainbow spaghetti" effect, which is hopefully mitigated by only having four series present in the plot.
 
 # Final Evaluation Approach
-For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_url) geared towards a general audience to gauge the effectiveness of my visualizations. The survey presented my visualizations and asked X questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions is below (please note that the map dashboard is plot A in the survey while the region plot is plot B). 
+For my final evaluation, I made a [Google Forms survey link](TODO_placeholder_url) geared towards a general audience to gauge the effectiveness of my visualizations. The survey presented my visualizations and asked X questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions are below (please note that the map dashboard is plot A in the survey while the region plot is plot B). 
 
-1. On a scale of 1 to 10 how would you describe your level of comfort and experience working with data (1 = uncomfortable/minimal experience; 10 = very comfortable/experienced)? 
+1. On a scale of 1 to 10, how would you describe your level of comfort and experience working with data (1 = uncomfortable/minimal experience; 10 = very comfortable/experienced)? 
     + Motivation: Ensure that the visualizations are approachable to a general audience and determine if data professionals had different feedback 
     + Responses: TODO add survey results (maybe with quick charts or just summary descriptions?)
 2. Plot A: Approximately how many states did you click on in the map to see individual states' trends? 
@@ -408,7 +408,7 @@ TODO add this after survey results come in.
 
 ## Evolution of Project
 
-The scope and goals of this project shifted over the course of the term. In module 1 when we selected our data source, I originally planned to present data from individual institutions (i.e., universities) to understand more fine-scale variation in CS over time. However, once I started working with the data, I decided to respect the recommendation to keep datasets below 5K rows to not overburden `altair`. In module 2, we defined more specific tasks for our visualizations. I originally planned to integrate my plots into a dashboard such that the regions aggregation was manual (users clicked on states to define a region, which then populates a line plot). I scaled this back significantly and relied on predefined regions in order to be able to show the code, visualizations, and narrative all together (in this `qmd`) and simplify the workflow. In module 3, my evaluation approach changed slightly. I originally envisioned asking more experimental evaluation (e.g., testing if users are pulling correct statistics from plots), but anticipating a small sample size, and ultimately went with a qualitative evaluation and wanted to make the survey relatively quick and easy to fill out. 
+The scope and goals of this project shifted over the course of the term. In module 1 when we selected our data source, I initially planned to present data from individual institutions (i.e., universities) to understand more fine-scale variation in CS over time. However, once I started working with the data, I decided to respect the recommendation to keep datasets below 5K rows to not overburden `altair`. In module 2, we defined more specific tasks for our visualizations. At first, I planned to integrate my plots into a dashboard such that the regions aggregation was manual (users clicked on states to define a region, which then populates a line plot). I scaled this back significantly and relied on predefined regions in order to be able to show the code, visualizations, and narrative all together (in this `qmd`) and simplify the workflow. In module 3, my evaluation approach changed slightly. I originally envisioned a more experimental evaluation (e.g., testing if users are pulling correct statistics from plots). However, anticipating a small sample size, I ultimately went with a qualitative evaluation and strove to make the survey relatively quick and easy to fill out. 
 
 # Metadata
 
