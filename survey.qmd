@@ -10,7 +10,7 @@ format:
 
 ## Introduction 
 
-Thank you for participating in my data visualization survey. This document contains two interactive plots that accompany the [Google Form](TODO_placeholder_url) survey. 
+Thank you for participating in my data visualization survey! This document contains two interactive plots that accompany the [Google Form](TODO_placeholder_url) survey. Please note that these visualizations are optimized for desktop viewing and may not display correctly on mobile devices. 
 
 These visualizations aim to answer the question: **when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically?** They use data from the Department of Education (specifically, Integrated Postsecondary Education Data System or IPEDS) regarding the number of bachelor's degrees and CS bachelor's degrees awarded in each state between the years 1984 and 2024. 
 
