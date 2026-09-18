@@ -425,3 +425,5 @@ The scope and goals of this project shifted over the course of the term. In modu
 # Metadata
 
 This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
+
+ TODO add link to Git repository (so grader can get to it from the rendered HTML)
