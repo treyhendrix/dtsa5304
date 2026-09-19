@@ -65,7 +65,7 @@ rainbow_pasta_plot.show()
 
 IPEDS is an annual data collection project conducted by the US Department of Education that gathers information from every college that participates in federal student aid programs (virtually all institutions). To answer our question about computer science, we are more interested in the IPEDS Completions component, which tracks degrees awarded using a special taxonomy that lets us compare apples-to-apples across institutions. We will use the "Computer Science" NCSES detailed field group to ensure that we collect information on many degrees that may not be simply named "Computer Science Major."
 
-To import these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py`.
+To import these data, I leverage the excellent `scipeds` package, which utilizes a DuckDB framework. For details, please see the script `src/dtsa5304/etl.py` in [the project's GitHub repository](https://github.com/treyhendrix/dtsa5304).
 
 ```{python}
 # | label: ipeds-etl
@@ -425,5 +425,3 @@ The scope and goals of this project shifted over the course of the term. In modu
 # Metadata
 
 This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
-
- TODO add link to Git repository (so grader can get to it from the rendered HTML)
