@@ -232,3 +232,6 @@ plots/
 # HTML Output 
 rise_of_cs.html
 survey.html
+
+# Posit Connect Configuration 
+.posit/
