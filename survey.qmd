@@ -10,7 +10,7 @@ format:
 
 ## Introduction 
 
-Thank you for participating in my data visualization survey! This document contains two interactive plots that accompany the [Google Form](TODO_placeholder_url) survey. Please note that these visualizations are optimized for desktop viewing and may not display correctly on mobile devices. 
+Thank you for participating in my data visualization survey! This document contains two interactive plots that accompany the [Google Forms](https://forms.gle/NPbjNjMwRcZJeC3VA) survey. Please note that these visualizations are optimized for desktop viewing and may not display correctly on mobile devices. 
 
 These visualizations aim to answer the question: **when did computer science (CS) become such a popular undergraduate degree, and how has its popularity varied geographically?** They use data from the Department of Education (specifically, Integrated Postsecondary Education Data System or IPEDS) regarding the number of bachelor's degrees and CS bachelor's degrees awarded in each state between the years 1984 and 2024. 
 
@@ -28,8 +28,17 @@ Plot B aggregates data into four broad regions and shows the year-by-year trend 
 ## Plot B: Rise of CS - Regions Plot
 
 ```{=html}
-<iframe src="plots/regions.html" width="100%" height="450" scrolling="no" style="border:none; overflow:hidden;"></iframe>
+<iframe src="plots/regions.html" width="100%" height="500" scrolling="no" style="border:none; overflow:hidden;"></iframe>
 ```
 
+## Metadata
 
-This document was rendered at `{python} datetime.now(ZoneInfo("America/New_York")).isoformat()`.
+```{python}
+# | label: date-for-metadata
+# | include: false
+from datetime import datetime
+from zoneinfo import ZoneInfo
+time_stamp = datetime.now(ZoneInfo("America/New_York")).isoformat()
+```
+
+This document was rendered at `{python} time_stamp`.
