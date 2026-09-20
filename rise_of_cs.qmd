@@ -371,34 +371,35 @@ The hope is that this map will accomplish three of the seven types of interactio
 
 Regarding the specific mappings and encodings, I selected a map because I wanted to display data from all 50 states, but navigating a list or legend with that many entries is often tedious. Assuming the user is familiar with US geography, the map provides an easy way to query the dataset and identify regional trends in all-time change. The choice of a choropleth (using color to communicate the main state-wide statistic) was a natural one since the states vary too much in size for other markings to be easy to see. I chose a diverging encoding for the legend since an overall decline (blue) or increase (red) in CS degrees was a meaningful pattern that I wanted to investigate. I took care to scale the color so that no change (0%) appears as white and -X and +X have comparable luminance in blue and red, respectively.
 
-The state-specific plot is more straightforward, and I deliberately mapped fewer values to aesthetics. For example, I originally considered mapping the size of the points to the total number of degrees awarded; however, the result was too busy for my liking, so I restricted that information to the tooltips. I included both points and lines to make the tooltips more accessible. 
+The state-specific plot is more straightforward, and I deliberately mapped fewer values to aesthetics. For example, I originally considered mapping the size of the points to the total number of degrees awarded; however, the result was too busy for my liking, so I restricted that information to the tooltips. I included both points and lines to make the tooltips more accessible. Mapping color to state allows users to select multiple to compare (by holding shift). 
 
 ## Regions Plot
 
 I decided to make this visualization to interrogate an observation I had while making the map dashboard: computer science's popularity seemed to have increased only slightly or even decreased in the south, overall. The regions plot makes this implicit synthesis an explicit comparison, sacrificing the exploratory focus of the map dashboard for a fixed set of marks that illustrate few noticeable differences between the regions. In lecture, we learned that heavily interactive plots (like the map dashboard requiring clicking through states) require a high degree of user attention and memory. On the other hand, the regions plot captures the comparison that we want to make in the "gist" of the visualization (i.e., at a glance). The design of this plot was also heavily influenced by my desire to compare time series data without creating a "rainbow spaghetti" effect, which is hopefully mitigated by only having four series present in the plot and using a fairly standard categorical color palette.
 
 # Final Evaluation Approach
-For my final evaluation, I made a [Google Forms survey link](https://forms.gle/SHrje3VZM6T3vfyo9) geared towards a general audience to gauge the effectiveness of my visualizations. For recruitment, I relied on two pools of people: (1) my friends and family, who typically do not have a great deal of experience designing data visualizations, and (2) classmates/peers via InScribe. The survey presented my visualizations and asked 10 questions related to them. Ultimately, Y participants filled it out. The responses and motivation for the questions are below (please note that the map dashboard is plot A in the survey while the region plot is plot B). 
+For my final evaluation, I made a [Google Forms survey link](https://forms.gle/SHrje3VZM6T3vfyo9) geared towards a general audience to gauge the effectiveness of my visualizations. For recruitment, I relied on two pools of people: (1) my friends and family, who typically do not have a great deal of experience designing data visualizations, and (2) classmates/peers via InScribe. The survey presented my visualizations and asked 10 questions related to them. Ultimately, 6 participants filled it out. The responses and motivation for the questions are below (please note that the map dashboard is plot A in the survey while the region plot is plot B). 
 
+TODO add survey results (maybe with quick charts or just summary descriptions?)
 
 1. On a scale of 1 to 10, how would you describe your level of comfort and experience working with data (1 = uncomfortable/minimal experience; 10 = very comfortable/experienced)? 
     + Motivation: Ensure that the visualizations are approachable to a general audience and determine if data professionals had different feedback 
-    + Responses: TODO add survey results (maybe with quick charts or just summary descriptions?)
+    + Responses: Bimodal distribution with mostly data professionals weighing in (one user selected 2 and five users selected 8-10)
 2. Plot A: Approximately how many states did you click on in the map to see individual states' trends? 
     + Motivation: Gauge how engaging the map design is 
-    + Responses: 
+    + Responses: three users selected 6 to 10; two users selected 11 to 15; one user selected more than 20
 3. Plot A: On a scale of 1 to 10, how confident are you that you understand the statistic that determines the color of each state in the map (1 = not confident at all; 10 = very confident)? 
     + Motivation: I wanted to see if users understood the potentially confusing all time change statistic. 
-    + Responses:
+    + Responses: Uniform distribution shifted right; each user selected a different score: 3, 5, 7, 8, 9, 10
 4. Plot A: Do you see evidence of neighboring states showing similar trends in the "rise of CS"? Why or why not? 
     + Motivation: Test my own conclusions/interpretation and the plot's effectiveness
-    + Responses:
+    + Responses: Split almost 50-50, but the majority of users noted exceptions and ambiguity
 5. Plot A: On a scale of 1 to 10, how useful do you find this plot in answering our research questions (1 = not useful at all; 10 = extremely useful)?
     + Motivation: General visualization effectiveness
-    + Responses:
+    + Responses: Mixed; two users did not find it helpful (scores of 3 and 4); two users found it fairly useful (scores of 7 and 8); two users gave it a perfect score (10)
 6. Plot A: Please provide any additional feedback on plot A below (optional).
     + Motivation: Open-ended feedback/journaling 
-    + Responses:
+    + Responses: Four users responded; one noted that the "when did CS become popular" question is not answered well by this plot; one mentioned that the choropleth metric was confusingly worded; one noted an unintended use of multiple state selection, which was buggy
 7. Plot B: Do you think "the rise of CS" has varied across the four regions shown in this plot? Why or why not? 
     + Motivation: Test my own conclusions/interpretation and the plot's effectiveness
     + Responses:
@@ -423,6 +424,26 @@ Before reviewing the results of the survey, I reasoned that my visualizations wo
 * Users understood what the graphs were showing (question 3) and drew reasonable, evidence-based conclusions about the patterns in the graphs (questions 4 and 7).
 
 TODO add this after survey results come in. 
+
+One user helped me discover and fix a bug in my map dashboard: 
+
+> I especially liked the ability to select multiple states and compare their trends over time. But when you select several states, it can be difficult to tell which trend line corresponds to each state.
+
+When I first made the plot, I didn't realize that `altair` supports multiple selection by holding shift by default. In light of this, I decided to map state to the color aesthetic and add explicit support and acknowledgement of this feature. 
+
+TODO Gather quotes
+
+> The gradient makes it hard to see the direction when close to 0%.
+
+> Also, since the graph shows percentage changes, the number of CS degrees may differ greatly from state to state. Therefore, it is difficult to conclude that neighboring states show a similar trend.
+
+> This suggests a regional component to the rise of CS (possibly related to shared economic, educational, and technology-sector characteristics). But the pattern is not perfect, since some neighboring states show noticeably different levels of growth.
+
+> Well it's mixed. Your research question is two pronged: "when did CS become popular" and "how has its popularity varied geographically." I think Plot A can answer the latter to a degree, but not the former. There should be some timelapse, or at least the ability to see (Year 201X - Year 1984). Also, are we looking for a year when all the states turn red as the time that CS became popular? How are we defining popularity? As for geography, are we thinking in terms of metropolitan areas? political/cultural regions
+
+> No, the trends look very similar. The proportion varying makes sense, as the plot goes Northeast > West > South > Midwest. That is just where the tech and business sectors are located in the United States.
+
+> It is interesting that the number of CS degrees increased around 1985, when personal computers were becoming more widespread, and again around 2000, during the early growth of the Internet. After that, there was a period of decline, followed by another increase in recent years as AI has become more popular.
 
 ## Evolution of Project
 
