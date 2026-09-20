@@ -257,11 +257,12 @@ state_chart = (
     .encode(
         x=alt.X("year:Q", axis=alt.Axis(format="d"), title="Year"),
         y=alt.Y("prop_cs:Q", axis=alt.Axis(format="%"), title="Proportion"),
+        color=alt.Color("state_abbreviation:N", title="State"),
         tooltip=[
             alt.Tooltip("state_abbreviation:N", title="State"),
             alt.Tooltip("year:Q", title="Year"),
             alt.Tooltip("prop_cs:Q", title="Proportion", format=".2%"),
-            alt.Tooltip("prop_desc:N", title="Count")
+            alt.Tooltip("prop_desc:N", title="Count"),
         ],
     )
     .transform_filter(click)
@@ -271,7 +272,11 @@ state_chart = (
         title=alt.TitleParams(
             # Dynamic title via Vega expression
             text=alt.expr(
-                "click.state_abbreviation ? click.state_abbreviation[0] + ' Trend' : 'Click Map to View Individual State Trends'"
+                "click.state_abbreviation && length(click.state_abbreviation) > 0 "
+                "? (length(click.state_abbreviation) > 5 "
+                "   ? join(slice(click.state_abbreviation, 0, 5), ', ') + ', ... Trend' "
+                "   : join(click.state_abbreviation, ', ') + ' Trend') "
+                ": 'Click Map to View Individual State Trends'"
             ),
             anchor="middle",
         ),
@@ -281,6 +286,7 @@ state_chart = (
 
 ```{python}
 # | label: combined-dashboard
+# | fig-cap: "Tip: Hold shift when clicking to select multiple states from the map."
 
 dashboard = change_map & state_chart
 dashboard.save(PLOTS_DIR / "map_dashboard.html")
