@@ -380,8 +380,6 @@ I decided to make this visualization to interrogate an observation I had while m
 # Final Evaluation Approach
 For my final evaluation, I made a [Google Forms survey link](https://forms.gle/SHrje3VZM6T3vfyo9) geared towards a general audience to gauge the effectiveness of my visualizations. For recruitment, I relied on two pools of people: (1) my friends and family, who typically do not have a great deal of experience designing data visualizations, and (2) classmates/peers via InScribe. The survey presented my visualizations and asked 10 questions related to them. Ultimately, 6 participants filled it out. The responses and motivation for the questions are below (please note that the map dashboard is plot A in the survey while the region plot is plot B). 
 
-TODO add survey results (maybe with quick charts or just summary descriptions?)
-
 1. On a scale of 1 to 10, how would you describe your level of comfort and experience working with data (1 = uncomfortable/minimal experience; 10 = very comfortable/experienced)? 
     + Motivation: Ensure that the visualizations are approachable to a general audience and determine if data professionals had different feedback 
     + Responses: Bimodal distribution with mostly data professionals weighing in (one user selected 2 and five users selected 8-10)
@@ -402,16 +400,16 @@ TODO add survey results (maybe with quick charts or just summary descriptions?)
     + Responses: Four users responded; one noted that the "when did CS become popular" question is not answered well by this plot; one mentioned that the choropleth metric was confusingly worded; one noted an unintended use of multiple state selection, which was buggy
 7. Plot B: Do you think "the rise of CS" has varied across the four regions shown in this plot? Why or why not? 
     + Motivation: Test my own conclusions/interpretation and the plot's effectiveness
-    + Responses:
+    + Responses: All but one user did not see regional differences
 8. Plot B: On a scale of 1 to 10, how useful do you find this plot in answering our research questions (1 = not useful at all; 10 = extremely useful)?
     + Motivation: General visualization effectiveness
-    + Responses:
+    + Responses: Positively received; one user reported 8; three users reported 9; two users reported 10.
 9. Plot B: Please provide any additional feedback on plot B below (optional).
     + Motivation: Open-ended feedback/journaling 
-    + Responses:
+    + Responses: Three users responded with generally positive feedback
 10. If you could create a third plot (i.e., "Plot C") to visualize these data in a different way, what kind of plot would you create?
     + Motivation: Determine if the visualizations encouraged further "I wonder if..." questions
-    + Responses:
+    + Responses: All six users responded; they suggested connecting the data to historical event timelines (e.g., advances in CS/technology), availability of CS degrees by institution, and animation to show change over time in the map
 
 
 # Synthesis
@@ -423,7 +421,7 @@ Before reviewing the results of the survey, I reasoned that my visualizations wo
 * Users were engaged and clicked through more than a handful of states (question 2) and had well-developed follow-up questions (question 10).
 * Users understood what the graphs were showing (question 3) and drew reasonable, evidence-based conclusions about the patterns in the graphs (questions 4 and 7).
 
-TODO add this after survey results come in. 
+BOOKMARK working on this 
 
 One user helped me discover and fix a bug in my map dashboard: 
 
@@ -431,7 +429,9 @@ One user helped me discover and fix a bug in my map dashboard:
 
 When I first made the plot, I didn't realize that `altair` supports multiple selection by holding shift by default. In light of this, I decided to map state to the color aesthetic and add explicit support and acknowledgement of this feature. 
 
-TODO Gather quotes
+**Overall, the final evaluation study helped me realize that I had focused too much on making the map dashboard "feature rich" and too little on directly answering the questions that I was asking. Often, simpler and more direct visualizations are better, as evidenced by the clear user preference for the regions plot over the map dashboard.**
+
+TODO Organize these quotes
 
 > The gradient makes it hard to see the direction when close to 0%.
 
@@ -444,6 +444,10 @@ TODO Gather quotes
 > No, the trends look very similar. The proportion varying makes sense, as the plot goes Northeast > West > South > Midwest. That is just where the tech and business sectors are located in the United States.
 
 > It is interesting that the number of CS degrees increased around 1985, when personal computers were becoming more widespread, and again around 2000, during the early growth of the Internet. After that, there was a period of decline, followed by another increase in recent years as AI has become more popular.
+
+> I would like a historical timeline of major events in CS industry (dot com bubble burst, great recession, etc.) below Plot B to understand what might be driving the change in popularity.
+
+> Maybe plotting an overall nation wide trend of raw number (not proportion) of CS degrees awarded, along with 5 of it's competitors. Would be interesting to see which all go up when CS goes down.
 
 ## Evolution of Project
 
