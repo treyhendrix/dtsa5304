@@ -421,33 +421,19 @@ Before reviewing the results of the survey, I reasoned that my visualizations wo
 * Users were engaged and clicked through more than a handful of states (question 2) and had well-developed follow-up questions (question 10).
 * Users understood what the graphs were showing (question 3) and drew reasonable, evidence-based conclusions about the patterns in the graphs (questions 4 and 7).
 
-BOOKMARK working on this 
-
-One user helped me discover and fix a bug in my map dashboard: 
-
-> I especially liked the ability to select multiple states and compare their trends over time. But when you select several states, it can be difficult to tell which trend line corresponds to each state.
-
-When I first made the plot, I didn't realize that `altair` supports multiple selection by holding shift by default. In light of this, I decided to map state to the color aesthetic and add explicit support and acknowledgement of this feature. 
-
-**Overall, the final evaluation study helped me realize that I had focused too much on making the map dashboard "feature rich" and too little on directly answering the questions that I was asking. Often, simpler and more direct visualizations are better, as evidenced by the clear user preference for the regions plot over the map dashboard.**
-
-TODO Organize these quotes
-
-> The gradient makes it hard to see the direction when close to 0%.
-
-> Also, since the graph shows percentage changes, the number of CS degrees may differ greatly from state to state. Therefore, it is difficult to conclude that neighboring states show a similar trend.
-
-> This suggests a regional component to the rise of CS (possibly related to shared economic, educational, and technology-sector characteristics). But the pattern is not perfect, since some neighboring states show noticeably different levels of growth.
-
-> Well it's mixed. Your research question is two pronged: "when did CS become popular" and "how has its popularity varied geographically." I think Plot A can answer the latter to a degree, but not the former. There should be some timelapse, or at least the ability to see (Year 201X - Year 1984). Also, are we looking for a year when all the states turn red as the time that CS became popular? How are we defining popularity? As for geography, are we thinking in terms of metropolitan areas? political/cultural regions
-
-> No, the trends look very similar. The proportion varying makes sense, as the plot goes Northeast > West > South > Midwest. That is just where the tech and business sectors are located in the United States.
+By these metrics, I consider my visualizations moderately successful but far from perfect. I was most pleased that the visualization inspired users to think of further analyses and to hypotheses about the source of trends. A few of my favorite responses area:
 
 > It is interesting that the number of CS degrees increased around 1985, when personal computers were becoming more widespread, and again around 2000, during the early growth of the Internet. After that, there was a period of decline, followed by another increase in recent years as AI has become more popular.
 
 > I would like a historical timeline of major events in CS industry (dot com bubble burst, great recession, etc.) below Plot B to understand what might be driving the change in popularity.
 
 > Maybe plotting an overall nation wide trend of raw number (not proportion) of CS degrees awarded, along with 5 of it's competitors. Would be interesting to see which all go up when CS goes down.
+
+Nevertheless, I think the most helpful feedback was critical but constructive. One user helped me discover and fix a bug in my map dashboard. When I first made the plot, I did not realize that `altair` supports multiple selection (by holding shift) as a default. Doing so in the original version would add multiple states to the line plot, but all points would be connected by a single line, creating a jumbled mess. In light of this, I decided to map the categorical state variable to the color aesthetic (allowing multiple distinct lines to be plotted) and add explicit support and acknowledgment of this feature. Another user noted that my map dashboard failed to address several components of my research questions: 
+
+> Well it's mixed. Your research question is two pronged: "when did CS become popular" and "how has its popularity varied geographically." I think Plot A can answer the latter to a degree, but not the former. There should be some time-lapse, or at least the ability to see (Year 201X - Year 1984).
+
+This comment, together with the clear user preference for the regions plot over the map dashboard, **helped me realize that I had focused too much on making the map dashboard "feature-rich" and too little on directly answering the questions that I was asking. Often, simpler and more direct visualizations are better.** At the same time, I believe there is value in the exploration that highly interactive plots encourage, so I am reluctant to abandon the idea of a dashboard altogether. 
 
 ## Evolution of Project
 
