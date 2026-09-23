@@ -421,7 +421,7 @@ Before reviewing the results of the survey, I reasoned that my visualizations wo
 * Users were engaged and clicked through more than a handful of states (question 2) and had well-developed follow-up questions (question 10).
 * Users understood what the graphs were showing (question 3) and drew reasonable, evidence-based conclusions about the patterns in the graphs (questions 4 and 7).
 
-By these metrics, I consider my visualizations moderately successful but far from perfect. I was most pleased that the visualization inspired users to think of further analyses and to hypotheses about the source of trends. A few of my favorite responses area:
+By these metrics, I consider my visualizations moderately successful but far from perfect. I was most pleased that the visualization inspired users to think of further analyses and to hypotheses about the source of trends. A few of my favorite responses are:
 
 > It is interesting that the number of CS degrees increased around 1985, when personal computers were becoming more widespread, and again around 2000, during the early growth of the Internet. After that, there was a period of decline, followed by another increase in recent years as AI has become more popular.
 
