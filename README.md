@@ -1,4 +1,4 @@
-# dtsa5304
+# DTSA 5304
 CU Boulder MSDS Fundamentals of Data Visualization (DTSA 5304) Final Project
 
 ## Assignment Information and Repository Structure
