@@ -58,7 +58,7 @@ def get_ipeds_data() -> pd.DataFrame:
     if len(duckdb_files) == 0:
         logger.info("No DuckDB files found. Downloading IPEDS data...")
         scipeds.download_db(DATA_DIR, overwrite=True, verbose=False)
-        logger.info("IPEDS data sucessfully downloaded as a .duckdb file")
+        logger.info("IPEDS data successfully downloaded as a .duckdb file")
         duckdb_files = _update_list_of_duckdb_files()
     elif len(duckdb_files) == 1:
         logger.info("Previous IPEDS download found. Skipping fresh data download.")
